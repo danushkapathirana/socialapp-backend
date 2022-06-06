@@ -20,10 +20,10 @@ const userController = {
             const payLoad = {user: {"id": user._id}}
             const token = jwt.sign(payLoad, config.get("tokenSecretKey"), {expiresIn: 240000})
 
-            res.status(200).send({"Message": "Successfully created a user", "Data": result, "Token": token})
+            res.status(200).send({"Message": "Successfully created a new user", "Data": result, "Token": token})
 
         } catch (error) {
-            res.status(400).send({"Message": "Error while creating a user", "Data": error.message})
+            res.status(400).send({"Message": "Error occurred while creating a user", "Data": error.message})
         }
     },
 
@@ -50,7 +50,7 @@ const userController = {
 
         } catch (error) {
             console.log(error.message);
-            return res.status(400).send({"Message": "Error occurred while log in"})
+            return res.status(400).send({"Message": "Error occurred while login"})
         }
     }
 }
