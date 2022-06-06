@@ -1,0 +1,4 @@
+{
+    "url": "mongodb+srv://admin:admin@socialappcluster.sqdwx.mongodb.net/socialApp?retryWrites=true&w=majority",
+    "tokenSecretKey": "7ImlkIjoiNjI"
+}
