@@ -23,7 +23,7 @@ const userController = {
             res.status(200).send({"Message": "Successfully created a new user", "Data": result, "Token": token})
 
         } catch (error) {
-            res.status(400).send({"Message": "Error occurred while creating a user", "Data": error.message})
+            res.status(400).send({"Message": "Error occurred while creating a user", "Error": error.message})
         }
     },
 
@@ -50,7 +50,7 @@ const userController = {
 
         } catch (error) {
             console.log(error.message);
-            return res.status(400).send({"Message": "Error occurred while login"})
+            return res.status(400).send({"Message": "Error occurred while login", "Error": error.message})
         }
     }
 }
