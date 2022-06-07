@@ -38,11 +38,23 @@ const profileController = {
 
     fetchAllProfiles: async (req, res) => {
         try {
-            const profiles = await Profile.find()
+            // const profiles = await Profile.find() //get all the details of profile
+            // const profiles = await Profile.find().populate("user", ["email"]) //populate some specific data on user model as well
+            const profiles = await Profile.find({}, {"description": 1}) //populate some specific data and exclude all other data
             res.status(200).send({"Message": "Successfully fetched all records", "Data": profiles})
 
         } catch (error) {
             res.status(500).send({"Message": "Error occurred while fetching profiles", "Error": error.message})
+        }
+    },
+
+    fetchProfileById: async (req, res) => {
+        try {
+            const profile = await Profile.findOne({user: req.params.id})
+            res.status(200).send({"Message": "Successfully fetched the record", "Data": profile})
+
+        } catch (error) {
+            res.status(500).send({"Message": "Error occurred while fetching the profile", "Error": error.message})
         }
     }
 }
