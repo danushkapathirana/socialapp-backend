@@ -40,7 +40,7 @@ const profileController = {
         try {
             // const profiles = await Profile.find() //get all the details of profile
             // const profiles = await Profile.find().populate("user", ["email"]) //populate some specific data on user model as well
-            const profiles = await Profile.find({}, {"description": 1}) //populate some specific data and exclude all other data
+            const profiles = await Profile.find({}, {"location": 1, "description": 1, "education": 1, "skills": 1, "socialMedia": 1}) //populate some specific data and exclude all other data
             return res.status(200).send({"Message": "Successfully fetched all records", "Data": profiles})
 
         } catch (error) {
@@ -58,7 +58,7 @@ const profileController = {
         }
     },
 
-    education: async (req, res) => {
+    createEducation: async (req, res) => {
         const { schoolName, degree, from, to, description} = req.body
 
         const educationObject = {}

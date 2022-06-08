@@ -31,3 +31,4 @@ app.listen(9000, () => {
 // bcryptjs -> to encrypt the data (password)
 // jsonwebtoken
 // config
+// express-validator
