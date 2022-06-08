@@ -7,6 +7,6 @@ const middleware = require("../../middleware")
 router.post("/", middleware, profileController.profileCreateAndUpdate)
 router.get("/", middleware, profileController.fetchAllProfiles)
 router.get("/:id", middleware, profileController.fetchProfileById)
-router.post("/education", middleware, profileController.education)
+router.post("/education", middleware, profileController.createEducation)
 
 module.exports = router
