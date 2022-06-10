@@ -8,9 +8,10 @@ const User = require("../../models/User")
 const userController = {
     userCreate: async (req, res) => {
         try {
-            const { email, password } = req.body
+            const { name, email, password } = req.body
 
             const user = new User({
+                name,
                 email,
                 password
             })
