@@ -59,6 +59,36 @@ const postsController = {
         } catch (error) {
             return res.status(400).send({"Message": "Error occurred while deleting the post", "Error": error.message})
         }
+    },
+
+    likePost: async (req, res) => {
+        try {
+            const { reactionType } = req.body
+
+            const post = await Posts.findById(req.params.id);
+
+            if(!post) {
+                return res.status(400).send({"Message": "Post not found"})
+            }
+
+            // unlike logic
+            const likedByUser = post.likes.filter((like) => like.user.toString() === req.user.id)
+
+            if(likedByUser.length > 0) {
+                const index = post.likes.findIndex((value) => value.user === req.user.id)
+                post.likes.splice(index, 1)
+
+            } else {
+                // like logic
+                post.likes.unshift({user: req.user.id, "reactionType": reactionType})
+            }
+
+            await post.save()
+            return res.status(200).send({"Message": "Liked", "Date": post.likes})
+
+        } catch (error) {
+            return res.status(400).send({"Message": "Error occurred while liking the post", "Error": error.message})
+        }
     }
 }
 
