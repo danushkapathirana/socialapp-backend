@@ -3,7 +3,7 @@ const User = require("../../models/User")
 
 const postsController = {
     postCreate: async (req, res) => {
-        const {text} = req.body
+        const { text } = req.body
 
         try {
             const user = await User.findById(req.user.id).select("name") //get selected data, for exclude -> .select("-name")
@@ -40,6 +40,24 @@ const postsController = {
 
         } catch (error) {
             return res.status(400).send({"Message": "Error occurred while fetching the post", "Error": error.message})
+        }
+    },
+
+    deletePost: async (req, res) => {
+        const { id } = req.params
+
+        try {
+            const post = await Posts.findOne({id})
+
+            if(post.user.toString() !== req.user.id) {
+                return res.status(400).send({"Message": "Only author can delete a post"})
+            }
+
+            await Posts.findByIdAndDelete(id)
+            return res.status(200).send({"Message": "Successfully deleted the post"})
+
+        } catch (error) {
+            return res.status(400).send({"Message": "Error occurred while deleting the post", "Error": error.message})
         }
     }
 }
