@@ -136,7 +136,6 @@ const postsController = {
             }
 
             const index = post.comments.findIndex((value) => value._id.toString() === req.params.commentId)
-            console.log(index);
             post.comments.splice(index, 1)
             const deleted = await post.save()
             res.status(200).send({"Message": "Successfully deleted the comment", "Data": deleted})
@@ -146,9 +145,34 @@ const postsController = {
         }
     },
 
-    // updateComment: async (req, res) => {
+    updateComment: async (req, res) => {
+        var { newComment } = req.body
 
-    // }
+        try {
+            const post = await Posts.findById(req.params.postId)
+
+            if(!post) {
+                return res.status(400).send({"Message": "Post not found"})
+            }
+
+            const comment = await post.comments.find((value) => value._id.toString() === req.params.commentId)
+
+            if(!comment) {
+                return res.status(400).send({"Message": "Comment not found"})
+            }
+
+            if(req.user.id !== comment.user.toString()) {
+                return res.status(400).send({"Message": "Only author can delete a comment"})
+            }
+
+            comment.text = newComment
+            post.save()
+            res.status(200).send({"Message": "Successfully updated the comment", "Data": post})
+
+        } catch (error) {
+            res.status(400).send({"Message": "Error occurred while commenting to the post", "Error": error.message})
+        }
+    }
 }
 
 module.exports = postsController
