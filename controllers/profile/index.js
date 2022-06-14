@@ -78,6 +78,22 @@ const profileController = {
         } catch (error) {
             return res.status(500).send({"Message": "Error occurred while creating the education", "Error": error.message})
         }
+    },
+
+    deleteEducation: async (req, res) => {
+        try {
+            const profile = await Profile.findOne({user: req.user.id})
+
+            const education = profile.education
+            const index = education.findIndex((value) => value._id == req.params.id)
+
+            education.splice(index, 1)
+            await profile.save()
+            res.status(200).send({"Message": "Successfully deleted an education record"})
+
+        } catch (error) {
+            res.status(500).send({"Message": "Error occurred while deleting an education record"})
+        }
     }
 }
 
