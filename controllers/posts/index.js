@@ -36,7 +36,7 @@ const postsController = {
 
         try {
             const post = await Posts.findOne({id})
-            return res.status(200).send({"Message": "Successfullt fetched the post", "Data": post})
+            return res.status(200).send({"Message": "Successfully fetched the post", "Data": post})
 
         } catch (error) {
             return res.status(400).send({"Message": "Error occurred while fetching the post", "Error": error.message})
@@ -89,7 +89,66 @@ const postsController = {
         } catch (error) {
             return res.status(400).send({"Message": "Error occurred while liking the post", "Error": error.message})
         }
-    }
+    },
+
+    postComment: async (req, res) => {
+        const { comment } = req.body
+
+        try {
+            const post  = await Posts.findById(req.params.id)
+            const user = await User.findById(req.user.id).select("-password")
+
+            if(!post) {
+                return res.status(400).send({"Message": "Post not found"})
+            }
+
+            const newComment = {
+                user: user.id,
+                text: comment,
+                name: user.name
+            }
+
+            post.comments.unshift(newComment)
+            const commented = await post.save()
+            return res.status(200).send({"Message": "Successfully commented to the post", "Data": commented})
+
+        } catch (error) {
+            return res.status(400).send({"Message": "Error occurred while commenting to the post", "Error": error.message})
+        }
+    },
+
+    deleteComment: async (req, res) => {
+        try {
+            const post = await Posts.findById(req.params.postId)
+
+            if(!post) {
+                return res.status(400).send({"Message": "Post not found"})
+            }
+
+            const comment = await post.comments.find((value) => value._id.toString() === req.params.commentId)
+
+            if(!comment) {
+                return res.status(400).send({"Message": "Comment not found"})
+            }
+
+            if(req.user.id !== comment.user.toString()) {
+                return res.status(400).send({"Message": "Only author can delete a comment"})
+            }
+
+            const index = post.comments.findIndex((value) => value._id.toString() === req.params.commentId)
+            console.log(index);
+            post.comments.splice(index, 1)
+            const deleted = await post.save()
+            res.status(200).send({"Message": "Successfully deleted the comment", "Data": deleted})
+
+        } catch (error) {
+            res.status(400).send({"Message": "Error occurred while commenting to the post", "Error": error.message})
+        }
+    },
+
+    // updateComment: async (req, res) => {
+
+    // }
 }
 
 module.exports = postsController
