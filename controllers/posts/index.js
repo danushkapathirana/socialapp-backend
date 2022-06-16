@@ -1,9 +1,23 @@
 const Posts = require("../../models/Posts")
 const User = require("../../models/User")
+const { validationResult } = require("express-validator")
 
 const postsController = {
     postCreate: async (req, res) => {
         const { text } = req.body
+
+        const errors = validationResult(req) //validation of text
+        if(!errors.isEmpty()) {
+            console.log(errors.errors);
+
+            if(errors.errors.length > 0);
+            {
+                const errorMsg = errors.errors.map((error) => error.msg)
+                console.log(errorMsg);
+
+                return res.status(400).send(errorMsg)
+            }
+        }
 
         try {
             const user = await User.findById(req.user.id).select("name") //get selected data, for exclude -> .select("-name")
