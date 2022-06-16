@@ -10,6 +10,19 @@ const userController = {
         try {
             const { name, email, password } = req.body
 
+            const errors = validationResult(req) //validation of email, password and name
+            if(!errors.isEmpty()) {
+                console.log(errors.errors);
+
+                if(errors.errors.length > 0);
+                {
+                    const errorMsg = errors.errors.map((error) => error.msg)
+                    console.log(errorMsg);
+    
+                    return res.status(400).send(errorMsg)
+                }
+            }
+
             const user = new User({
                 name,
                 email,

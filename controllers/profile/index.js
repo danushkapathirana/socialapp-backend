@@ -1,8 +1,22 @@
 const Profile = require("../../models/Profile")
+const { validationResult } = require("express-validator")
 
 const profileController = {
     profileCreateAndUpdate: async (req, res) => {
         const { location, description, skills, linkedIn, facebook, twitter } = req.body
+
+        const errors = validationResult(req) //validation of location and description
+        if(!errors.isEmpty()) {
+            console.log(errors.errors);
+
+            if(errors.errors.length > 0);
+            {
+                const errorMsg = errors.errors.map((error) => error.msg)
+                console.log(errorMsg);
+
+                return res.status(400).send(errorMsg)
+            }
+        }
 
         const profileObject = {}
         profileObject.user = req.user.id //adding a new key into 'profileObject' which is called user and assign the id which extract from middleware level
