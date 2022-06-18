@@ -176,7 +176,7 @@ const postsController = {
             }
 
             if(req.user.id !== comment.user.toString()) {
-                return res.status(400).send({"Message": "Only author can delete a comment"})
+                return res.status(400).send({"Message": "Only author can update a comment"})
             }
 
             comment.text = newComment
