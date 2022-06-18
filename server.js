@@ -19,7 +19,7 @@ dbConnection()
 app.use(bodyParser.json())
 app.use("/app", routes)
 
-app.listen(9000, () => {
+app.listen(process.env.PORT || 9000, () => {
     console.log("server started");
 })
 
@@ -32,3 +32,5 @@ app.listen(9000, () => {
 // jsonwebtoken
 // config
 // express-validator
+// dotenv -> for deployment to Heroku
+// dotenv-load- > for deployment to Heroku
